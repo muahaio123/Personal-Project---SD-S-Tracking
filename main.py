@@ -2,6 +2,7 @@ import os
 import shutil
 
 project_path = 'G:\\SD&S Tracking'
+employee_list_path = "employees_list.txt"
 employee_list: list[str] = []
 
 # create new site folder and copy the am1 and 2 files into it
@@ -25,12 +26,20 @@ def initialize_sitename(s: str):
 
 def initialize_employee_list():
     try:
-        with open("employees_list.txt", 'r') as file:
+        with open(employee_list_path, 'r') as file:
             content = file.read()
             employee_list = content.splitlines()
             print("current employee list: " + ', '.join(employee_list))
     except FileNotFoundError:
         print(f"The file was not found!")
+
+def add_new_employee(name: str, pin: str):
+    data = name + '-' + str(hash(pin))
+    try:
+        with open(employee_list_path, 'a') as file:
+            file.write(data)
+    except FileNotFoundError:
+        print(f"The file was not found!")        
 
 def main():
     initialize_employee_list()
@@ -38,8 +47,8 @@ def main():
     if not os.path.exists(project_path):
         os.makedirs(project_path)
 
-    print(os.listdir(project_path))
     sitename_list: list[str] = os.listdir(project_path)
+    print("current Sitename list: " + ', '.join(sitename_list))
 
     sitename_new: str = input("Enter site name to create new: ")
     initialize_sitename(sitename_new)
